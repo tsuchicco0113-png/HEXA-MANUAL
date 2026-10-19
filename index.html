@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>HEXA MANUAL</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    font-family: "Yu Gothic UI", "Hiragino Sans", system-ui, sans-serif;
+    background: #16181d; color: #e6e6e6;
+    margin: 0; padding: 24px; font-size: 14px;
+  }
+  h1 { font-size: 16px; margin: 0 0 16px; letter-spacing: .04em; }
+  .row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  input[type=text], input[type=number] {
+    background: #22252c; border: 1px solid #3a3f4a; color: #e6e6e6;
+    border-radius: 4px; padding: 7px 9px; font-size: 13px;
+  }
+  input[type=text] { flex: 1; font-family: ui-monospace, monospace; }
+  input[type=number] { width: 80px; }
+  button {
+    background: #2f6fb8; color: #fff; border: 0; border-radius: 4px;
+    padding: 8px 16px; font-size: 13px; cursor: pointer;
+  }
+  button.ghost { background: #333842; }
+  button:disabled { opacity: .45; cursor: default; }
+  label { color: #9aa1ad; font-size: 12px; }
+  #status { margin: 12px 0 8px; min-height: 18px; color: #8fd18f; font-size: 12px; }
+  #log {
+    width: 100%; height: 320px; box-sizing: border-box;
+    background: #101216; border: 1px solid #2c313a; color: #b9c0cc;
+    font-family: ui-monospace, monospace; font-size: 11.5px;
+    line-height: 1.6; padding: 10px; border-radius: 4px; resize: vertical;
+  }
+  #warn { color: #e0a44c; font-size: 12px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+  <h1>HEXA MANUAL</h1>
+  <div id="warn"></div>
+
+  <div class="row">
+    <input id="url" type="text" placeholder="https://docs.example.com/guide/" />
+  </div>
+  <div class="row">
+    <label>最大ページ</label>
+    <input id="maxPages" type="number" value="20" min="1" max="1000" />
+    <label>間隔(ms)</label>
+    <input id="interval" type="number" value="300" min="0" max="5000" />
+    <label><input id="scope" type="checkbox" checked /> このパス配下のみ</label>
+  </div>
+  <div class="row">
+    <button id="go">解析して PDF</button>
+    <button id="htmlOnly" class="ghost">HTML だけ保存</button>
+  </div>
+
+  <div id="status"></div>
+  <textarea id="log" readonly></textarea>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
