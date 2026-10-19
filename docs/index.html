@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HEXA MANUAL</title>
+<meta name="description" content="ドキュメントサイトのURLを入れると、本文を集めてしおり付きの1冊のPDFにまとめるデスクトップアプリ。" />
+<style>
+  :root {
+    --bg: #16181d; --panel: #1e2128; --rule: #2e333d;
+    --fg: #e6e6e6; --muted: #98a0ad; --accent: #5aa2f0; --warn: #e0a44c;
+    --code-bg: #101216;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f7f9; --panel: #ffffff; --rule: #dfe2e8;
+      --fg: #1a1c20; --muted: #616a78; --accent: #0b5cad; --warn: #9a6a14;
+      --code-bg: #eef0f4;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+    line-height: 1.8; font-size: 15px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 16px 72px; }
+  .brand { font-size: 12px; letter-spacing: .18em; color: var(--muted); }
+  h1 { font-size: 34px; letter-spacing: .04em; margin: 6px 0 10px; line-height: 1.3; }
+  .lead { font-size: 17px; color: var(--muted); margin: 0 0 28px; }
+  .status {
+    border: 1px solid var(--warn); border-radius: 6px; padding: 12px 16px;
+    margin: 0 0 36px; font-size: 14px;
+  }
+  .status strong { color: var(--warn); }
+  h2 {
+    font-size: 18px; margin: 44px 0 14px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  ol.flow { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  ol.flow li {
+    counter-increment: step; position: relative;
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 12px 16px 12px 52px; margin-bottom: 8px;
+  }
+  ol.flow li::before {
+    content: counter(step); position: absolute; left: 16px; top: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  ol.flow b { display: block; }
+  ol.flow span { color: var(--muted); font-size: 13.5px; }
+  ul { padding-left: 1.3em; }
+  li { margin: 4px 0; }
+  code {
+    background: var(--code-bg); border-radius: 3px; padding: 1px 6px;
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .9em;
+  }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .btn {
+    display: inline-block; padding: 9px 18px; border-radius: 5px; font-size: 14px;
+    text-decoration: none; border: 1px solid var(--accent); color: var(--accent);
+  }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.disabled { border-color: var(--rule); color: var(--muted); cursor: default; }
+  footer { margin-top: 56px; color: var(--muted); font-size: 12.5px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">HEXA STAGE</div>
+  <h1>HEXA MANUAL</h1>
+  <p class="lead">ドキュメントサイトのURLを入れると、本文を集めて<br>しおり・通しページ番号つきの<strong>1冊のPDF</strong>にまとめるデスクトップアプリ。</p>
+
+  <div class="status">
+    <strong>実験段階 / 未検証</strong> — コードは一通り実装済みですが、実機でのビルドと実サイトでの動作確認はこれからです。配布ファイルはまだありません。
+  </div>
+
+  <h2>仕組み</h2>
+  <ol class="flow">
+    <li><b>ページを見つける</b><span><code>llms-full.txt</code> → <code>llms.txt</code> → <code>sitemap.xml</code> → ナビのクロール、の順に試します。sitemap はサイドバー順に並べ直します。</span></li>
+    <li><b>本文だけ取り出す</b><span>Readability と、ドキュメントサイト向けのノイズ除去（目次・前後ナビ・フッターなど）を使います。</span></li>
+    <li><b>1本に連結する</b><span>見出しの階層を整え、内部リンクを文書内ジャンプに、外部リンクはURL併記にします。</span></li>
+    <li><b>PDFにする</b><span>手元の Chrome / Edge を操作して、しおり付きのPDFを書き出します。</span></li>
+  </ol>
+
+  <h2>なぜデスクトップアプリか</h2>
+  <ul>
+    <li>ブラウザだけでは、他サイトのHTMLを取得できません（CORS）。取得は Rust 側で行います。</li>
+    <li>しおり付きPDFは、ブラウザ内の印刷では作れません。そのためローカルのブラウザをCDPで操作しています。</li>
+  </ul>
+
+  <h2>動作環境</h2>
+  <ul>
+    <li>Windows / macOS / Linux（Tauri v2）</li>
+    <li>Chrome または Edge がインストールされていること</li>
+  </ul>
+
+  <h2>入手・使い方</h2>
+  <p>ダウンロード版は準備中です。今はソースから動かせます。</p>
+  <div class="links">
+    <span class="btn disabled">ダウンロード（準備中）</span>
+    <a class="btn primary" href="https://github.com/tsuchicco0113-png/HEXA-MANUAL">GitHub リポジトリ</a>
+    <a class="btn" href="https://github.com/tsuchicco0113-png/HEXA-MANUAL/blob/main/docs/SETUP.md">ビルド手順</a>
+  </div>
+
+  <footer>
+    生成したPDFは個人利用の範囲でお使いください。再配布は元サイトのライセンスに従ってください。
+  </footer>
+</main>
+</body>
+</html>
